@@ -14,8 +14,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 
 @TeleOp(name="RPM Controller")
-public class rpmControl extends LinearOpMode
-{
+public class rpmControl extends LinearOpMode {
 
 
 
@@ -41,8 +40,7 @@ public class rpmControl extends LinearOpMode
 
 
 
-    public void runOpMode() throws InterruptedException
-    {
+    public void runOpMode() throws InterruptedException {
 
 
 
@@ -58,8 +56,7 @@ public class rpmControl extends LinearOpMode
 
         // LOOPING CODE
 
-        while (opModeIsActive() && !isStopRequested())
-        {
+        while (opModeIsActive() && !isStopRequested()) {
 
 
 
@@ -70,24 +67,28 @@ public class rpmControl extends LinearOpMode
             decreaseRPM = gamepad1.dpad_down;
 
 
-            if (increaseRPM && !increaseRPMLast)
-            {
+            if (increaseRPM && !increaseRPMLast) {
+
                 targetRPM += (changeTargetRpmInterval);
+
             }
 
-            if (decreaseRPM && !decreaseRPMLast)
-            {
+            if (decreaseRPM && !decreaseRPMLast) {
+
                 targetRPM -= (changeTargetRpmInterval);
+
             }
 
 
-            if (targetRPM > maximumRPM)
-            {
+            if (targetRPM > maximumRPM) {
+
                 targetRPM = maximumRPM;
+
             }
-            else if (targetRPM < minimumRPM)
-            {
+            else if (targetRPM < minimumRPM) {
+
                 targetRPM = minimumRPM;
+
             }
 
 
