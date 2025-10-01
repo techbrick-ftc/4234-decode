@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 
 @TeleOp(name="RPM Controller")
@@ -54,10 +55,12 @@ public class rpmControl extends LinearOpMode
         flywheelPrimary.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         flywheelSecondary.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
+        flywheelPrimary.setDirection(DcMotorSimple.Direction.FORWARD);
+        flywheelSecondary.setDirection(DcMotorSimple.Direction.REVERSE);
 
 
         // LOOPING CODE
-
+        waitForStart();
         while (opModeIsActive() && !isStopRequested())
         {
 
@@ -91,8 +94,8 @@ public class rpmControl extends LinearOpMode
 
 
             targetVelocity = (targetRPM / 60) * ticksPerRevolution;
-            flywheelPrimary.setVelocity(targetVelocity);
-            //flywheelSecondary.setVelocity(targetVelocity);
+            flywheelPrimary.setVelocity(-targetVelocity);
+            flywheelSecondary.setVelocity(targetVelocity);
 
 
 

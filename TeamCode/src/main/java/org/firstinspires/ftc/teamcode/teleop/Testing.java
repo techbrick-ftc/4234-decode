@@ -58,7 +58,7 @@ public class Testing extends LinearOpMode {
                 headingLock = !headingLock;
             }
 
-            if (Math.abs(gamepad1.right_stick_x) > 0.2) {
+            if (Math.abs(gamepad1.right_stick_x) > 0.3) {
                 headingLock = false;
             }
 
@@ -71,7 +71,7 @@ public class Testing extends LinearOpMode {
                 if (angle <= -Math.PI){
                     angle += 2*Math.PI;
                 }
-                drive.To(X_Power, Y_Power, angle, slowModeHeld, true);
+                drive.To(X_Power, Y_Power, angle, 1, true);
             } else {
                 drive.To(X_Power, -Y_Power, -0.7 * Rotation, slowModeHeld, fieldCentric);
             }
