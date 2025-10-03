@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -18,6 +18,7 @@ public class AprilTagRotater extends LinearOpMode {
 
     boolean fieldCentric = true;
     boolean headingLock = false;
+    boolean aprilTagLock = false;
 
     boolean fieldCentricTrigger;
     boolean fieldCentricTriggerLast;
@@ -66,9 +67,16 @@ public class AprilTagRotater extends LinearOpMode {
 
             if (Math.abs(gamepad1.right_stick_x) > 0.2) {
                 headingLock = false;
+                aprilTagLock = false;
             }
 
-            if (gamepad1.right_bumper) {
+            if (gamepad1.right_bumper && !aprilTagLock) {
+                aprilTagLock = true;
+            } else if (gamepad1.right_bumper && aprilTagLock) {
+                aprilTagLock = false;
+            }
+
+            if (aprilTagLock) {
                 Rotation = aprilTagTesting.getRotationCorrection();
             }
 
