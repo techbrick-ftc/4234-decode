@@ -9,24 +9,36 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class subFlywheel {
 
-    DcMotorEx flyWheelPrimary;
-    DcMotorEx flyWheelSecondary;
+    DcMotorEx flyWheel;
 
     public subFlywheel(HardwareMap hardwareMap) {
 
-        flyWheelPrimary = hardwareMap.get(DcMotorEx.class, "frontRight");
-        flyWheelSecondary = hardwareMap.get(DcMotorEx.class, "frontLeft");
+        flyWheel = hardwareMap.get(DcMotorEx.class, "frontRight");
 
-        flyWheelPrimary.setDirection(DcMotorSimple.Direction.FORWARD);
-        flyWheelSecondary.setDirection(DcMotorSimple.Direction.REVERSE);
+        flyWheel.setDirection(DcMotorSimple.Direction.FORWARD);
 
-        flyWheelPrimary.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        flyWheelSecondary.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-
+        flyWheel.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
 
     }
 
+    public void setFlyWheel(double targetFlywheelRPM, double outputGearRatio) { //TODO: Test
 
+        // Set for 6000 RPM motor, may need to be changed?
+        final double ticksPerRevolution = 21;
+
+        // Gearing = output teeth / input teeth. Set, then change motor speed to directly set flywheel RPM.
+        double targetRPM = targetFlywheelRPM / outputGearRatio;
+
+        // Clamp targetRPM to (max: rpm of motor, min: 0)
+        if (targetRPM > 6000) {
+            targetRPM = 6000;
+        } else if (targetRPM < 0) {
+            targetRPM = 0;
+        }
+
+        flyWheel.setVelocity(targetRPM / 60 * ticksPerRevolution);
+
+    }
 
 }

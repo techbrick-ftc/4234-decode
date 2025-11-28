@@ -62,8 +62,8 @@ public class subDrive {
             double angle = getImu();
 
             // Calculating power variables
-            double X = X_Movement * Math.cos(-(angle)) - Y_Movement * Math.sin(-(angle));
-            double Y = Y_Movement * Math.cos(-(angle)) + X_Movement * Math.sin(-(angle));
+            double X = fieldCentric ? (X_Movement * Math.cos(-(angle)) - Y_Movement * Math.sin(-(angle))) : X_Movement; // TODO: Test
+            double Y = fieldCentric ? (Y_Movement * Math.cos(-(angle)) + X_Movement * Math.sin(-(angle))) : Y_Movement;
 
             // Dividing power by a denominator to set maximum output to 1
             double denominator = Math.max(Math.abs(Y) + Math.abs(X) + Math.abs(Rotation), 1);
