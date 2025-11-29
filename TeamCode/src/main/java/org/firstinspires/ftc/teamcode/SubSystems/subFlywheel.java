@@ -28,7 +28,7 @@ public class subFlywheel {
         final double ticksPerRevolution = 21;
 
         // Gearing = output teeth / input teeth. Set, then change motor speed to directly set flywheel RPM.
-        double targetRPM = targetFlywheelRPM / outputGearRatio;
+        double targetRPM = targetFlywheelRPM * outputGearRatio;
 
         // Clamp targetRPM to (max: rpm of motor, min: 0)
         if (targetRPM > 6000) {

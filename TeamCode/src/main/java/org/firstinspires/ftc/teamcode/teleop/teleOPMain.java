@@ -1,12 +1,13 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
 import org.firstinspires.ftc.teamcode.SubSystems.subDrive;
+import org.firstinspires.ftc.teamcode.SubSystems.subFlywheel;
 import org.firstinspires.ftc.teamcode.SubSystems.subIntake;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-@TeleOp(name="Test TeleOp")
+@TeleOp(name="[Current] 4234 Main TeleOP")
 public class teleOPMain extends LinearOpMode {
 
     //Chassis
@@ -19,9 +20,11 @@ public class teleOPMain extends LinearOpMode {
     double angle;
     public double teamColor;
     public double targetAngle;
+    double headingkP = 0.4;
 
     // Declare Subsystems
     subDrive drive = null;
+    subFlywheel flywheel = null;
 
 
     @Override
@@ -30,6 +33,7 @@ public class teleOPMain extends LinearOpMode {
 
         // Init Subsystems
         drive = new subDrive(hardwareMap);
+        flywheel = new subFlywheel(hardwareMap);
 
 
         // Drive variables and controls
@@ -55,8 +59,14 @@ public class teleOPMain extends LinearOpMode {
 
             // Drive inputs
             X_Power = gamepad1.left_stick_x;
-            Y_Power = gamepad1.left_stick_y;
+            Y_Power = -gamepad1.left_stick_y;
             Rotation = gamepad1.right_stick_x;
+
+            if (gamepad1.x) {
+                State = 1;
+            } else if (gamepad1.a) {
+                State = 2;
+            }
 
 
             // Triggers and booleans
@@ -75,8 +85,14 @@ public class teleOPMain extends LinearOpMode {
             }
             slowModeToggleLast = slowModeToggle;
 
+            if (gamepad2.back && gamepad2.x) {
+                teamColor = -1;
+            } else if (gamepad2.back && gamepad2.b) {
+                teamColor = 1;
+            }
 
 
+            //region Drive
             if (State == 0) {
 
                 drive.To(0, 0, 0, 0, fieldCentric);
@@ -88,8 +104,9 @@ public class teleOPMain extends LinearOpMode {
             } else if (State == 2) {
 
                 // Calculate target angle based on team color
-                targetAngle = -teamColor * 0.7 * Math.PI;
+                targetAngle = Math.PI - teamColor * 0.3 * Math.PI;
                 angle = -drive.getImu() + Math.PI - targetAngle;
+
 
 
                 // Offset for more efficient rotation
@@ -101,8 +118,23 @@ public class teleOPMain extends LinearOpMode {
                 }
 
                 //TODO: Look at faster / more precise method of rotation
-                drive.To(X_Power, Y_Power, angle, slowMode ? 0.7 : 1, fieldCentric);
+                drive.To(X_Power, Y_Power, angle * headingkP, slowMode ? 0.7 : 1, fieldCentric);
 
+            }
+            //endregion
+
+            //region Flywheel
+            flywheel.setFlyWheel(3000 * gamepad1.right_trigger, 2);
+
+
+            // Telemetry
+            telemetry.addData("Team (-1 = blue, 1 = red)", teamColor);
+            telemetry.addData("Rotation", drive.getRawImu());
+            telemetry.addData("Field Centric?", fieldCentric);
+            telemetry.addData("Slow Mode", slowMode);
+
+            if (!gamepad1.square) { // Use to suppress updates to tele data
+                telemetry.update();
             }
 
 
