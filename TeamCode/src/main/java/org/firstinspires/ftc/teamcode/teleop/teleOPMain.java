@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.teleop;
 import org.firstinspires.ftc.teamcode.SubSystems.subDrive;
 import org.firstinspires.ftc.teamcode.SubSystems.subFlywheel;
 import org.firstinspires.ftc.teamcode.SubSystems.subIntake;
+import org.firstinspires.ftc.teamcode.SubSystems.subAprilTagDetection;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -10,21 +11,50 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 @TeleOp(name="[Current] 4234 Main TeleOP")
 public class teleOPMain extends LinearOpMode {
 
+    // Drive Constants
+    double kP = 0.4;
+
+    double slowPow = 0.6;
+    double hiPow = 1;
+
+    double intakeAngle = 0.3;
+    double shootingHomeAngle = 0.7;
+
+
+
+
+
+
+
+
+
+
+
+
     //Chassis
     double State = 1;
     // 0 - Disabled
     // 1 - Driver controlled
-    // 2 - Intaking, Heading Held
-    // 3 - Shooting, Heading Held
+        // 1.0 = Standard Driving
+    // 2 - Intaking
+        // 2.1 - Intaking, heading held
+        // 2.2 - Intaking, free rotating
+    // 3 - Shooting
+        // 3.1 - Shooting, manual aim
+        // 3.2 - Shooting, heading held
+        // 3.3 - Shooting, aiming using apriltags
+
 
     double angle;
     public double teamColor;
     public double targetAngle;
-    double headingkP = 0.4;
 
     // Declare Subsystems
     subDrive drive = null;
     subFlywheel flywheel = null;
+    subIntake intake = null;
+    subAprilTagDetection subAprilTagDetection = null;
+
 
 
     @Override
@@ -34,22 +64,26 @@ public class teleOPMain extends LinearOpMode {
         // Init Subsystems
         drive = new subDrive(hardwareMap);
         flywheel = new subFlywheel(hardwareMap);
-
+        intake = new subIntake(hardwareMap);
+        subAprilTagDetection = new subAprilTagDetection(hardwareMap, telemetry); //TODO: Check variable
 
         // Drive variables and controls
         double X_Power;
         double Y_Power;
         double Rotation;
 
+        double gatePosition = 0.5;
+        double flyWheelSpeed;
+
         boolean slowMode = false;
-        boolean slowModeToggle = false;
+        boolean slowModeToggle;
         boolean slowModeToggleLast = false;
 
         boolean fieldCentric = true;
-        boolean fieldCentricToggle = false;
+        boolean fieldCentricToggle;
         boolean fieldCentricToggleLast = false;
 
-        teamColor = 0;
+        teamColor = -1;
 
 
         waitForStart();
@@ -62,10 +96,14 @@ public class teleOPMain extends LinearOpMode {
             Y_Power = -gamepad1.left_stick_y;
             Rotation = gamepad1.right_stick_x;
 
-            if (gamepad1.x) {
-                State = 1;
+            flyWheelSpeed = gamepad1.right_trigger * 3000;
+
+            if (gamepad1.b) {
+                State = 0;
+            } else if (gamepad1.x) {
+                State = 2.2;
             } else if (gamepad1.a) {
-                State = 2;
+                State = 3.2;
             }
 
 
@@ -96,35 +134,83 @@ public class teleOPMain extends LinearOpMode {
             if (State == 0) {
 
                 drive.To(0, 0, 0, 0, fieldCentric);
+                intake.Set(0,0, gatePosition);
 
-            } else if (State == 1) {
+            } else if (Math.floor(State) == 1) {
 
                 drive.To(X_Power, Y_Power, Rotation, slowMode ? 0.7 : 1, fieldCentric);
+                intake.Set(0, 0, gatePosition);
 
-            } else if (State == 2) {
+            } else if (Math.floor(State) == 2) {
 
-                // Calculate target angle based on team color
-                targetAngle = Math.PI - teamColor * 0.3 * Math.PI;
-                angle = -drive.getImu() + Math.PI - targetAngle;
+                if (State == 2.1) {
 
+                    drive.To(X_Power, Y_Power, Rotation, slowMode ? 0.7 : 1, fieldCentric);
+                    intake.Set(1,1,gatePosition);
 
+                } else if (State == 2.2) {
 
-                // Offset for more efficient rotation
-                if (angle >= Math.PI){
-                    angle -= 2*Math.PI;
+                    // Calculate target angle based on team color
+                    targetAngle = Math.PI - teamColor * 0.3 * Math.PI;
+                    angle = -drive.getImu() + Math.PI - targetAngle;
+
+                    // Offset for more efficient rotation
+                    if (angle >= Math.PI){
+                        angle -= 2*Math.PI;
+                    }
+                    if (angle <= -Math.PI){
+                        angle += 2*Math.PI;
+                    }
+
+                    drive.To(X_Power, Y_Power, angle * kP, slowMode ? 0.7 : 1, fieldCentric);
+                    intake.Set(1, 1, gatePosition);
+
                 }
-                if (angle <= -Math.PI){
-                    angle += 2*Math.PI;
+
+            } else if (Math.floor(State) == 3) {
+
+                if (State == 3.1 ) {
+
+                    drive.To(X_Power, Y_Power, Rotation, slowMode ? 0.7 : 1, fieldCentric);
+                    intake.Set(0, 0, gatePosition);
+
+                } else if (State == 3.2) {
+
+                    // Calculate target angle based on team color
+                    targetAngle = Math.PI - teamColor * 0.7 * Math.PI; //TODO: Check Direction, might need to reverse term
+                    angle = -drive.getImu() + Math.PI - targetAngle;
+
+                    // Offset for more efficient rotation
+                    if (angle >= Math.PI){
+                        angle -= 2*Math.PI;
+                    }
+                    if (angle <= -Math.PI){
+                        angle += 2*Math.PI;
+                    }
+
+                    drive.To(X_Power, Y_Power, angle * kP, slowMode ? 0.7 : 1, fieldCentric);
+
+                    if (subAprilTagDetection.getOffsetX() != 0) {
+
+                        State = 3.3; // Aim using apriltags
+
+                    }
+
+                } else if (State == 3.3) {
+
+                    drive.To(X_Power, Y_Power, subAprilTagDetection.getRotationCorrection() * kP, slowMode ? 0.7 : 1, fieldCentric);
+
+
                 }
 
-                //TODO: Look at faster / more precise method of rotation
-                drive.To(X_Power, Y_Power, angle * headingkP, slowMode ? 0.7 : 1, fieldCentric);
+                flywheel.setFlyWheel(flyWheelSpeed, 2);
+
 
             }
             //endregion
 
             //region Flywheel
-            flywheel.setFlyWheel(3000 * gamepad1.right_trigger, 2);
+            //flywheel.setFlyWheel(3000 * gamepad1.right_trigger, 2);
 
 
             // Telemetry

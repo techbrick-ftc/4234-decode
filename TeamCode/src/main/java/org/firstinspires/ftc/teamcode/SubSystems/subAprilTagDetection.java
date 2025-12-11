@@ -14,13 +14,13 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 import java.util.List;
 
-public class aprilTagSubsystem {
+public class subAprilTagDetection {
     private VisionPortal visionPortal;
     private AprilTagProcessor aprilTag;
-    private Telemetry telemetry;
+    public Telemetry telemetry; //TODO: Check if private or public
     private double imageWidth;
 
-    public aprilTagSubsystem(HardwareMap hardwareMap, Telemetry telemetry) {
+    public subAprilTagDetection(HardwareMap hardwareMap, Telemetry telemetry) {
         this.telemetry = telemetry;
 
         imageWidth = 640;
@@ -28,7 +28,8 @@ public class aprilTagSubsystem {
                 .setDrawAxes(true)
                 .setDrawCubeProjection(true)
                 .setDrawTagOutline(true)
-                .setOutputUnits(DistanceUnit.INCH, AngleUnit.DEGREES)
+                // .setOutputUnits(DistanceUnit.INCH, AngleUnit.DEGREES) //TODO: See if needs changing to radians?
+                .setOutputUnits(DistanceUnit.INCH, AngleUnit.RADIANS)
                 .build();
 
         visionPortal = new VisionPortal.Builder()
@@ -53,19 +54,24 @@ public class aprilTagSubsystem {
 
 //converts the offset into rotation correction value
     public double getRotationCorrection() {
+
         double offset = getOffsetX();
         if (offset == 0) {
             return 0.0;
         }
 
-        double kP = 0.003;
+        // double kP = 0.003; //TODO: See if needs increasing, esp if changing from degrees to radians
+        double kP = 0.17;
         double rotation = kP * offset;
 
         return Math.max(-1, Math.min(1, rotation));
+
     }
 
     public void stop() {
+
         visionPortal.close();
+
     }
 
 }

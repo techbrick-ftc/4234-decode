@@ -81,10 +81,10 @@ public class subDrive {
 
         } else {
 
-            frontRight.setVelocity(0);
-            frontLeft.setVelocity(0);
-            backRight.setVelocity(0);
-            backLeft.setVelocity(0);
+            frontRight     .setPower(0);
+            frontLeft      .setPower(0);
+            backRight      .setPower(0);
+            backLeft       .setPower(0);
 
         }
 
