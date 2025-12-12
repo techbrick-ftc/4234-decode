@@ -82,7 +82,7 @@ public class teleOPMain2 extends LinearOpMode {
             yP = -gamepad1.left_stick_y;
             rP =  gamepad1.right_stick_x;
 
-
+            /*
             slowModeTL = slowModeT;
             intakeTL = intakeT;
             aimTL = aimT;
@@ -96,27 +96,25 @@ public class teleOPMain2 extends LinearOpMode {
             manualT = gamepad1.y;
             resetimuT = (gamepad1.left_stick_button && gamepad1.right_stick_button);
             teamChangeT = gamepad1.dpad_left;
-
-            if (slowModeT && !slowModeTL) {
+            */
+            if (gamepad1.startWasPressed()) {
                 slowMode = !slowMode;
             }
-            if (intakeT && !intakeTL) {
-                //headingTargetAngle = Math.PI + intakeAngle * targetAngleMultiplier;
+            if (gamepad1.aWasPressed()) {
                 headingTargetAngle = intakeAngle * targetAngleMultiplier;
                 headingLock = true;
             }
-            if (aimT && !aimTL) {
-                //headingTargetAngle = Math.PI + outtakeAngle * targetAngleMultiplier;
+            if (gamepad1.bWasPressed()) {
                 headingTargetAngle = outtakeAngle * targetAngleMultiplier;
                 headingLock = true;
             }
-            if (manualT && !manualTL || rP > 0.5) {
+            if (gamepad1.yWasPressed() || rP > 0.5) {
                 headingLock = false;
             }
             if (resetimuT && !resetimuTL) {
                 drive.recalibrate();
             }
-            if (teamChangeT && !teamChangeTL) {
+            if (gamepad1.optionsWasPressed()) {
                 isRedTeam = !isRedTeam;
 
                 if (isRedTeam) {
@@ -130,13 +128,11 @@ public class teleOPMain2 extends LinearOpMode {
             }
 
 
-
             if (!slowMode) {
                 drivePow = defPow;
             } else {
                 drivePow = slowPow;
             }
-
 
 
             if (!headingLock) {
