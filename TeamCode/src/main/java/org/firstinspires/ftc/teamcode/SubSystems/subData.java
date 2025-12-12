@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.SubSystems;
 
 public class subData {
 
-    static boolean isRedTeam;
+    public static boolean isRedTeam;
 
     public void setTeam (boolean team) {
         isRedTeam = team;
