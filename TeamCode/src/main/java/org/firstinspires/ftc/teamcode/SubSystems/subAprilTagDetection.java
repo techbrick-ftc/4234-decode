@@ -71,7 +71,7 @@ public class subAprilTagDetection {
     }
 
 //converts the offset into rotation correction value
-    public double getRotationCorrection() {
+    public double getRotationCorrection(double tagID) {
 
         double offset = getOffsetX(tagID);
         if (offset == 0) {

@@ -20,6 +20,7 @@ public class teleOPMain2 extends LinearOpMode {
     public double drivePow = defPow;
 
     public boolean isRedTeam = false;
+    public double colorTagID;
 
     public static double intakeAngle = 0.3 * Math.PI;
     public static double outtakeAngle = 0.7 * Math.PI;
@@ -118,8 +119,10 @@ public class teleOPMain2 extends LinearOpMode {
 
                 if (isRedTeam) {
                     targetAngleMultiplier = 1;
+                    colorTagID = 20;
                 } else {
                     targetAngleMultiplier = -1;
+                    colorTagID = 24;
                 }
 
             }
