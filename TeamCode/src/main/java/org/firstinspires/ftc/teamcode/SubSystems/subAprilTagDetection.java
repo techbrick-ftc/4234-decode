@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.SubSystems;
 
+import static org.firstinspires.ftc.teamcode.SubSystems.subData.isRedTeam;
+
 import android.util.Size;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -19,10 +21,19 @@ public class subAprilTagDetection {
     private AprilTagProcessor aprilTag;
     public Telemetry telemetry; //TODO: Check if private or public
     private double imageWidth;
+    private double tagID;
 
     public subAprilTagDetection(HardwareMap hardwareMap, Telemetry telemetry) {
         this.telemetry = telemetry;
 
+        //note which tag to identify based on team
+        if (isRedTeam) {
+            tagID = 20;
+        } else {
+            tagID = 24;
+        }
+
+        //set up the camera output and april tag processing
         imageWidth = 640;
         aprilTag = new AprilTagProcessor.Builder()
                 .setDrawAxes(true)
@@ -62,7 +73,7 @@ public class subAprilTagDetection {
 //converts the offset into rotation correction value
     public double getRotationCorrection() {
 
-        double offset = getOffsetX();
+        double offset = getOffsetX(tagID);
         if (offset == 0) {
             return 0.0;
         }
