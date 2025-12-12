@@ -42,14 +42,21 @@ public class subAprilTagDetection {
 
     }
 //get the x offset
-    public Double getOffsetX() {
-        List<AprilTagDetection> detections = aprilTag.getDetections();
+    public Double getOffsetX(double aprilTagID) {
+        List <AprilTagDetection> detections = aprilTag.getDetections();
         if (detections.isEmpty()) {
-            return (double) 0;
+            return 0.0;
         }
 
-        AprilTagDetection tag = detections.get(0);
-        return tag.center.x - (imageWidth / 2.0);
+        for(AprilTagDetection detection : detections) {
+            if (detection.id == aprilTagID) {
+                return detection.ftcPose.bearing;
+            }
+        }
+
+        return 0.0;
+//        AprilTagDetection tag = detections.get(0);
+//        return tag.center.x - (imageWidth / 2.0);
     }
 
 //converts the offset into rotation correction value

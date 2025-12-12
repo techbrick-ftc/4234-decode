@@ -51,6 +51,9 @@ public class teleOPMain2 extends LinearOpMode {
     boolean teamChangeT;
     boolean teamChangeTL;
 
+    boolean flyWheelOn = false;
+
+
 
     subDrive drive = null;
     subFlywheel flywheel = null;
@@ -145,6 +148,33 @@ public class teleOPMain2 extends LinearOpMode {
 
                 drive.To(xP, yP, headingAngle * kP, drivePow, true);
             }
+
+            if (gamepad1.dpadUpWasPressed() || gamepad2.dpadUpWasPressed()) {
+                if (flyWheelOn) {
+                    flywheel.setFlyWheel(0);
+                    flyWheelOn = false;
+                } else {
+                    flywheel.setFlyWheel(5500);
+                    flyWheelOn = true;
+                }
+            } else if (gamepad1.dpadLeftWasPressed() || gamepad1.dpadRightWasPressed() || gamepad2.dpadLeftWasPressed() || gamepad2.dpadRightWasPressed()) {
+                if (flyWheelOn) {
+                    flywheel.setFlyWheel(0);
+                    flyWheelOn = false;
+                } else {
+                    flywheel.setFlyWheel(4700);
+                    flyWheelOn = true;
+                }
+            } else if (gamepad1.dpadDownWasPressed() || gamepad2.dpadDownWasPressed()) {
+                if (flyWheelOn) {
+                    flywheel.setFlyWheel(0);
+                    flyWheelOn = false;
+                } else {
+                    flywheel.setFlyWheel(4000);
+                    flyWheelOn = true;
+                }
+            }
+
 
             intake.Set(1,1, gamepad1.right_trigger - gamepad1.left_trigger);
             intake.artifactLifts(gamepad1.left_bumper ? 1 : 0, gamepad1.right_bumper ? 1 : 0);

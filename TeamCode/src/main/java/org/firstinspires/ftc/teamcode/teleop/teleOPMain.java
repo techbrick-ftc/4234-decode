@@ -203,7 +203,7 @@ public class teleOPMain extends LinearOpMode {
 
                 }
 
-                flywheel.setFlyWheel(flyWheelSpeed, 2);
+                flywheel.setFlyWheel(flyWheelSpeed);
 
 
             }
