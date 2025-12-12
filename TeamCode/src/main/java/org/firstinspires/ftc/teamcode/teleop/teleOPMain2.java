@@ -4,6 +4,7 @@ import org.firstinspires.ftc.teamcode.SubSystems.subDrive;
 import org.firstinspires.ftc.teamcode.SubSystems.subFlywheel;
 import org.firstinspires.ftc.teamcode.SubSystems.subIntake;
 import org.firstinspires.ftc.teamcode.SubSystems.subAprilTagDetection;
+import org.firstinspires.ftc.teamcode.SubSystems.subData;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -59,7 +60,7 @@ public class teleOPMain2 extends LinearOpMode {
     subFlywheel flywheel = null;
     subIntake intake = null;
     subAprilTagDetection subAprilTagDetection = null;
-
+    subData subData = null;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -69,6 +70,7 @@ public class teleOPMain2 extends LinearOpMode {
         flywheel = new subFlywheel(hardwareMap);
         intake = new subIntake(hardwareMap);
         subAprilTagDetection = new subAprilTagDetection(hardwareMap, telemetry);
+        subData = new subData();
 
 
         waitForStart();
