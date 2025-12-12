@@ -53,14 +53,14 @@ public class subAprilTagDetection {
 
     }
 //get the x offset
-    public Double getOffsetX(double aprilTagID) {
+    public Double getOffsetX(/*double aprilTagID*/) {
         List <AprilTagDetection> detections = aprilTag.getDetections();
         if (detections.isEmpty()) {
             return 0.0;
         }
 
         for(AprilTagDetection detection : detections) {
-            if (detection.id == aprilTagID) {
+            if (detection.id == tagID) {
                 return detection.ftcPose.bearing;
             }
         }
@@ -71,9 +71,9 @@ public class subAprilTagDetection {
     }
 
 //converts the offset into rotation correction value
-    public double getRotationCorrection(double tagID) {
+    public double getRotationCorrection(/*double tagID*/) {
 
-        double offset = getOffsetX(tagID);
+        double offset = getOffsetX();
         if (offset == 0) {
             return 0.0;
         }
