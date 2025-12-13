@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.SubSystems.subData;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-@TeleOp(name="11/30")
+@TeleOp(name="Main TeleOP")
 
 
 public class teleOPMain2 extends LinearOpMode {
