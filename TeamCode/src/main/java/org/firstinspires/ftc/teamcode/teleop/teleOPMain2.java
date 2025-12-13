@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.SubSystems.subData;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-@TeleOp(name="11/30")
+@TeleOp(name="Main TeleOP")
 
 
 public class teleOPMain2 extends LinearOpMode {
@@ -29,6 +29,7 @@ public class teleOPMain2 extends LinearOpMode {
     public static double gateRange = 1;
 
     public boolean headingLock;
+    public boolean aprilTagLock = false;
     public static double headingAngle;
     public static double headingTargetAngle = 0;
     double targetAngleMultiplier = -1;
@@ -55,7 +56,7 @@ public class teleOPMain2 extends LinearOpMode {
 
     boolean flyWheelOn = false;
 
-
+    static double reverseAllMultiplier = 1;
 
     subDrive drive = null;
     subFlywheel flywheel = null;
@@ -97,21 +98,25 @@ public class teleOPMain2 extends LinearOpMode {
             resetimuT = (gamepad1.left_stick_button && gamepad1.right_stick_button);
             teamChangeT = gamepad1.dpad_left;
             */
-            if (gamepad1.startWasPressed()) {
+            if (gamepad1.bWasPressed()) {
                 slowMode = !slowMode;
             }
             if (gamepad1.aWasPressed()) {
                 headingTargetAngle = intakeAngle * targetAngleMultiplier;
                 headingLock = true;
             }
-            if (gamepad1.bWasPressed()) {
-                headingTargetAngle = outtakeAngle * targetAngleMultiplier;
+            if (gamepad1.xWasPressed()) {
+                /* headingTargetAngle = outtakeAngle * targetAngleMultiplier;
+                headingLock = true; *
+                 */
                 headingLock = true;
+                aprilTagLock = true;
             }
-            if (gamepad1.yWasPressed() || rP > 0.5) {
+            if (rP > 0.5) {
                 headingLock = false;
+                aprilTagLock = false;
             }
-            if (resetimuT && !resetimuTL) {
+            if (gamepad1.leftStickButtonWasPressed() && gamepad1.rightStickButtonWasPressed()) {
                 drive.recalibrate();
             }
             if (gamepad1.optionsWasPressed()) {
@@ -136,7 +141,11 @@ public class teleOPMain2 extends LinearOpMode {
 
 
             if (!headingLock) {
-                drive.To(xP, yP, rP, drivePow, true);
+                if (!aprilTagLock) {
+                    drive.To(xP, yP, rP, drivePow, true);
+                } else {
+                    drive.To(xP, yP, subAprilTagDetection.getRotationCorrection() * kP, slowMode ? 0.7 : 1, fieldCentric);
+                }
             } else {
                 //headingAngle = -drive.getImu() + Math.PI + headingTargetAngle;
                 headingAngle = headingTargetAngle - drive.getImu();
