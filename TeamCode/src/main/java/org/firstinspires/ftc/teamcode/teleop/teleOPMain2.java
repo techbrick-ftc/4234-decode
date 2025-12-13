@@ -53,6 +53,8 @@ public class teleOPMain2 extends LinearOpMode {
     boolean resetimuTL;
     boolean teamChangeT;
     boolean teamChangeTL;
+    boolean artifactUpR = false;
+    boolean artifactUpL = false;
 
     boolean flyWheelOn = false;
 
@@ -79,9 +81,9 @@ public class teleOPMain2 extends LinearOpMode {
         if (isStopRequested()) return;
         while (opModeIsActive()) {
 
-            xP =  gamepad1.left_stick_x;
+            xP = gamepad1.left_stick_x;
             yP = -gamepad1.left_stick_y;
-            rP =  gamepad1.right_stick_x;
+            rP = gamepad1.right_stick_x;
 
             /*
             slowModeTL = slowModeT;
@@ -149,10 +151,10 @@ public class teleOPMain2 extends LinearOpMode {
             } else {
                 //headingAngle = -drive.getImu() + Math.PI + headingTargetAngle;
                 headingAngle = headingTargetAngle - drive.getImu();
-                if (headingAngle >= Math.PI){
+                if (headingAngle >= Math.PI) {
                     headingAngle -= 2 * Math.PI;
                 }
-                if (headingAngle <= -Math.PI){
+                if (headingAngle <= -Math.PI) {
                     headingAngle += 2 * Math.PI;
                 }
 
@@ -185,9 +187,37 @@ public class teleOPMain2 extends LinearOpMode {
                 }
             }
 
+            if (gamepad1.right_trigger >= 0.2) {
+                intake.Set(1, 0);
+            } else {
+                intake.Set(0, 0);
+            }
 
-            intake.Set(1,1, gamepad1.right_trigger - gamepad1.left_trigger);
-            intake.artifactLifts(gamepad1.left_bumper ? 1 : 0, gamepad1.right_bumper ? 1 : 0);
+            if (gamepad1.left_trigger >= 0.2) {
+                intake.kicker(1);
+            } else {
+                intake.kicker(0);
+            }
+
+            if (gamepad1.left_bumper) {
+                if (artifactUpL) {
+                    intake.artifactLifts(0,0);
+                    artifactUpL = false;
+                } else {
+                    intake.artifactLifts(1,0);
+                    artifactUpL = true;
+                }
+            }
+
+            if (gamepad1.right_bumper) {
+                if (artifactUpR) {
+                    intake.artifactLifts(0,0);
+                    artifactUpR = false;
+                } else {
+                    intake.artifactLifts(0,1);
+                    artifactUpR = true;
+                }
+            }
 
 
             telemetry.addData("Slow Mode?", slowMode);

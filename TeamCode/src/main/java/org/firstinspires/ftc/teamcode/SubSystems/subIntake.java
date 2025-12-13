@@ -31,12 +31,15 @@ public class subIntake {
 
     }
 
-    public void Set (double intakeRowPower, double transferPow, double Gate) {
+    public void Set (double intakeRowPower, double Gate) {
 
         intakeRow.setPower(intakeRowPower);
-        transferBootWheels.setPower(transferPow);
         sortingGate.setPower(Gate);
 
+    }
+
+    public void kicker(double transforPow) {
+        transferBootWheels.setPower(transforPow);
     }
 
     public void artifactLifts (double left, double right) {
