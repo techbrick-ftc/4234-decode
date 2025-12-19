@@ -49,7 +49,7 @@ public class AprilTagRotater extends LinearOpMode {
             Rotation = gamepad1.right_stick_x;
             slowModeHeld = gamepad1.a ? .4 : 1;
 
-            Double offsetX = aprilTagTesting.getOffsetX();
+            Double offsetX = aprilTagTesting.getOffsetX(10);
 
             fieldCentricTriggerLast = fieldCentricTrigger;
             fieldCentricTrigger = gamepad1.b;
@@ -77,7 +77,7 @@ public class AprilTagRotater extends LinearOpMode {
             }
 
             if (aprilTagLock) {
-                Rotation = aprilTagTesting.getRotationCorrection();
+                Rotation = aprilTagTesting.getRotationCorrection(20);
             }
 
             if (headingLock) {

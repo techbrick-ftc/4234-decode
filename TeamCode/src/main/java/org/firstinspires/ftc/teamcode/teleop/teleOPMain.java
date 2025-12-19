@@ -5,9 +5,10 @@ import org.firstinspires.ftc.teamcode.SubSystems.subFlywheel;
 import org.firstinspires.ftc.teamcode.SubSystems.subIntake;
 import org.firstinspires.ftc.teamcode.SubSystems.subAprilTagDetection;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-
+@Disabled
 @TeleOp(name="[Current] 4234 Main TeleOP")
 public class teleOPMain extends LinearOpMode {
 
@@ -134,19 +135,19 @@ public class teleOPMain extends LinearOpMode {
             if (State == 0) {
 
                 drive.To(0, 0, 0, 0, fieldCentric);
-                intake.Set(0,0, gatePosition);
+                //intake.Set(0,0, gatePosition);
 
             } else if (Math.floor(State) == 1) {
 
                 drive.To(X_Power, Y_Power, Rotation, slowMode ? 0.7 : 1, fieldCentric);
-                intake.Set(0, 0, gatePosition);
+               // intake.Set(0, 0, gatePosition);
 
             } else if (Math.floor(State) == 2) {
 
                 if (State == 2.1) {
 
                     drive.To(X_Power, Y_Power, Rotation, slowMode ? 0.7 : 1, fieldCentric);
-                    intake.Set(1,1,gatePosition);
+                    // intake.Set(1,1,gatePosition);
 
                 } else if (State == 2.2) {
 
@@ -163,7 +164,7 @@ public class teleOPMain extends LinearOpMode {
                     }
 
                     drive.To(X_Power, Y_Power, angle * kP, slowMode ? 0.7 : 1, fieldCentric);
-                    intake.Set(1, 1, gatePosition);
+                    // intake.Set(1, 1, gatePosition);
 
                 }
 
@@ -172,7 +173,7 @@ public class teleOPMain extends LinearOpMode {
                 if (State == 3.1 ) {
 
                     drive.To(X_Power, Y_Power, Rotation, slowMode ? 0.7 : 1, fieldCentric);
-                    intake.Set(0, 0, gatePosition);
+                    // intake.Set(0, 0, gatePosition);
 
                 } else if (State == 3.2) {
 
@@ -190,7 +191,7 @@ public class teleOPMain extends LinearOpMode {
 
                     drive.To(X_Power, Y_Power, angle * kP, slowMode ? 0.7 : 1, fieldCentric);
 
-                    if (subAprilTagDetection.getOffsetX() != 0) {
+                    if (subAprilTagDetection.getOffsetX(20) != 0) {
 
                         State = 3.3; // Aim using apriltags
 
@@ -198,7 +199,7 @@ public class teleOPMain extends LinearOpMode {
 
                 } else if (State == 3.3) {
 
-                    drive.To(X_Power, Y_Power, subAprilTagDetection.getRotationCorrection() * kP, slowMode ? 0.7 : 1, fieldCentric);
+                    drive.To(X_Power, Y_Power, subAprilTagDetection.getRotationCorrection(20) * kP, slowMode ? 0.7 : 1, fieldCentric);
 
 
                 }

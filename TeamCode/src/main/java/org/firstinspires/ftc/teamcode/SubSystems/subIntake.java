@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 public class subIntake {
 
-    CRServo sortingGate;
+    //CRServo sortingGate;
     CRServo transferBootWheels;
     DcMotorEx intakeRow;
     Servo leftLift;
@@ -21,20 +21,23 @@ public class subIntake {
     public subIntake (HardwareMap hardwareMap) {
 
         intakeRow = hardwareMap.get(DcMotorEx.class, "intakeRow");
-        intakeRow.setDirection(DcMotorSimple.Direction.FORWARD);
+        intakeRow.setDirection(DcMotorSimple.Direction.REVERSE);
         intakeRow.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         transferBootWheels = hardwareMap.get(CRServo.class, "transfer");
         transferBootWheels.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        sortingGate = hardwareMap.get(CRServo.class, "gate");
+        leftLift = hardwareMap.get(Servo.class, "leftLift");
+        rightLift = hardwareMap.get(Servo.class, "rightLift");
+
+        //sortingGate = hardwareMap.get(CRServo.class, "gate");
 
     }
 
     public void Set (double intakeRowPower, double Gate) {
 
         intakeRow.setPower(intakeRowPower);
-        sortingGate.setPower(Gate);
+        //sortingGate.setPower(Gate);
 
     }
 

@@ -53,7 +53,7 @@ public class subAprilTagDetection {
 
     }
 //get the x offset
-    public Double getOffsetX(/*double aprilTagID*/) {
+    public Double getOffsetX(double tagID) {
         List <AprilTagDetection> detections = aprilTag.getDetections();
         if (detections.isEmpty()) {
             return 0.0;
@@ -71,9 +71,9 @@ public class subAprilTagDetection {
     }
 
 //converts the offset into rotation correction value
-    public double getRotationCorrection(/*double tagID*/) {
+    public double getRotationCorrection(double colorTagID) {
 
-        double offset = getOffsetX();
+        double offset = getOffsetX(colorTagID);
         if (offset == 0) {
             return 0.0;
         }

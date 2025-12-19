@@ -13,9 +13,9 @@ public class subFlywheel {
 
     public subFlywheel(HardwareMap hardwareMap) {
 
-        flyWheel = hardwareMap.get(DcMotorEx.class, "frontRight");
+        flyWheel = hardwareMap.get(DcMotorEx.class, "flywheel1");
 
-        flyWheel.setDirection(DcMotorSimple.Direction.FORWARD);
+        flyWheel.setDirection(DcMotorSimple.Direction.REVERSE);
 
         flyWheel.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 

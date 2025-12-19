@@ -41,6 +41,7 @@ public class teleOPMain2 extends LinearOpMode {
     double rP;
     double kP = 0.7;
 
+    /*
     boolean slowModeT = false;
     boolean slowModeTL;
     boolean intakeT = false;
@@ -53,6 +54,8 @@ public class teleOPMain2 extends LinearOpMode {
     boolean resetimuTL;
     boolean teamChangeT;
     boolean teamChangeTL;
+    */
+
     boolean artifactUpR = false;
     boolean artifactUpL = false;
 
@@ -83,7 +86,7 @@ public class teleOPMain2 extends LinearOpMode {
 
             xP = gamepad1.left_stick_x;
             yP = -gamepad1.left_stick_y;
-            rP = gamepad1.right_stick_x;
+            rP = -gamepad1.right_stick_x;
 
             /*
             slowModeTL = slowModeT;
@@ -114,7 +117,7 @@ public class teleOPMain2 extends LinearOpMode {
                 headingLock = true;
                 aprilTagLock = true;
             }
-            if (rP > 0.5) {
+            if (Math.abs(rP) > 0.5) {
                 headingLock = false;
                 aprilTagLock = false;
             }
@@ -146,7 +149,7 @@ public class teleOPMain2 extends LinearOpMode {
                 if (!aprilTagLock) {
                     drive.To(xP, yP, rP, drivePow, true);
                 } else {
-                    drive.To(xP, yP, subAprilTagDetection.getRotationCorrection() * kP, slowMode ? 0.7 : 1, fieldCentric);
+                    drive.To(xP, yP, subAprilTagDetection.getRotationCorrection(colorTagID) * kP, slowMode ? 0.7 : 1, fieldCentric);
                 }
             } else {
                 //headingAngle = -drive.getImu() + Math.PI + headingTargetAngle;
@@ -160,64 +163,36 @@ public class teleOPMain2 extends LinearOpMode {
 
                 drive.To(xP, yP, headingAngle * kP, drivePow, true);
             }
-
-            if (gamepad1.dpadUpWasPressed() || gamepad2.dpadUpWasPressed()) {
-                if (flyWheelOn) {
-                    flywheel.setFlyWheel(0);
-                    flyWheelOn = false;
-                } else {
-                    flywheel.setFlyWheel(5500);
-                    flyWheelOn = true;
-                }
-            } else if (gamepad1.dpadLeftWasPressed() || gamepad1.dpadRightWasPressed() || gamepad2.dpadLeftWasPressed() || gamepad2.dpadRightWasPressed()) {
-                if (flyWheelOn) {
-                    flywheel.setFlyWheel(0);
-                    flyWheelOn = false;
-                } else {
-                    flywheel.setFlyWheel(4700);
-                    flyWheelOn = true;
-                }
+            if (gamepad1.dpadRightWasPressed()) {
+                flywheel.setFlyWheel(0);
+            } else if (gamepad1.dpadUpWasPressed() || gamepad2.dpadUpWasPressed()) {
+                flywheel.setFlyWheel(5500);
+            } else if (gamepad1.dpadLeftWasPressed() || gamepad2.dpadLeftWasPressed()) {
+                flywheel.setFlyWheel(4700);
             } else if (gamepad1.dpadDownWasPressed() || gamepad2.dpadDownWasPressed()) {
-                if (flyWheelOn) {
-                    flywheel.setFlyWheel(0);
-                    flyWheelOn = false;
-                } else {
-                    flywheel.setFlyWheel(4000);
-                    flyWheelOn = true;
-                }
-            }
-
-            if (gamepad1.right_trigger >= 0.2) {
-                intake.Set(1, 0);
-            } else {
-                intake.Set(0, 0);
+                flywheel.setFlyWheel(4000);
             }
 
             if (gamepad1.left_trigger >= 0.2) {
+                intake.Set(1, 1);
+                intake.kicker(1);
+            } else if (gamepad1.right_trigger >= 0.2) {
+                intake.Set(-1, -1);
                 intake.kicker(1);
             } else {
+                intake.Set(0, 0);
                 intake.kicker(0);
             }
 
-            if (gamepad1.left_bumper) {
+            if (gamepad1.leftBumperWasPressed()) {
                 if (artifactUpL) {
-                    intake.artifactLifts(0,0);
                     artifactUpL = false;
                 } else {
-                    intake.artifactLifts(1,0);
                     artifactUpL = true;
                 }
             }
 
-            if (gamepad1.right_bumper) {
-                if (artifactUpR) {
-                    intake.artifactLifts(0,0);
-                    artifactUpR = false;
-                } else {
-                    intake.artifactLifts(0,1);
-                    artifactUpR = true;
-                }
-            }
+            intake.artifactLifts(gamepad1.right_bumper ? .5 : 1, gamepad1.left_bumper ? .5 : .07);
 
 
             telemetry.addData("Slow Mode?", slowMode);
