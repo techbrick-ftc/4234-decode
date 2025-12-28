@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.SubSystems;
 
-import static org.firstinspires.ftc.teamcode.SubSystems.subData.isRedTeam;
+import static org.firstinspires.ftc.teamcode.SubSystems.SubData.isRedTeam;
 
 import android.util.Size;
 
@@ -16,14 +16,14 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 import java.util.List;
 
-public class subAprilTagDetection {
+public class SubAprilTagDetection {
     private VisionPortal visionPortal;
     private AprilTagProcessor aprilTag;
     public Telemetry telemetry; //TODO: Check if private or public
     private double imageWidth;
     private double tagID;
 
-    public subAprilTagDetection(HardwareMap hardwareMap, Telemetry telemetry) {
+    public SubAprilTagDetection(HardwareMap hardwareMap, Telemetry telemetry) {
         this.telemetry = telemetry;
 
         //note which tag to identify based on team
@@ -52,7 +52,7 @@ public class subAprilTagDetection {
                 .build();
 
     }
-//get the x offset
+    //get the x offset
     public Double getOffsetX(double tagID) {
         List <AprilTagDetection> detections = aprilTag.getDetections();
         if (detections.isEmpty()) {
@@ -66,14 +66,15 @@ public class subAprilTagDetection {
         }
 
         return 0.0;
+
 //        AprilTagDetection tag = detections.get(0);
 //        return tag.center.x - (imageWidth / 2.0);
     }
 
-//converts the offset into rotation correction value
+    //converts the offset into rotation correction value
     public double getRotationCorrection(double colorTagID) {
-
         double offset = getOffsetX(colorTagID);
+
         if (offset == 0) {
             return 0.0;
         }
@@ -83,13 +84,10 @@ public class subAprilTagDetection {
         double rotation = kP * offset;
 
         return Math.max(-1, Math.min(1, rotation));
-
     }
 
     public void stop() {
-
         visionPortal.close();
-
     }
 
 }

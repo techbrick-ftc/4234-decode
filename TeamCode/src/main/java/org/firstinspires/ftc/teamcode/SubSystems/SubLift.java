@@ -6,11 +6,11 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-public class subLift {
+public class SubLift {
     DcMotorEx liftRight;
     DcMotorEx liftLeft;
 
-    public subLift(HardwareMap hardwareMap) {
+    public SubLift(HardwareMap hardwareMap) {
         liftRight = hardwareMap.get(DcMotorEx.class, "LiftRight");
         liftLeft = hardwareMap.get(DcMotorEx.class, "LiftLeft");
 

@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.teleop;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.SubSystems.subDrive;
+import org.firstinspires.ftc.teamcode.SubSystems.SubDrive;
 
 
 @TeleOp(name="Test TeleOp")
@@ -26,13 +26,13 @@ public class Testing extends LinearOpMode {
 
     public static double targetAngle = (5 * Math.PI) / 4;
 
-    subDrive drive = null;
+    SubDrive drive = null;
 
 
     @Override
     public void runOpMode() throws InterruptedException {
 
-        drive = new subDrive(hardwareMap);
+        drive = new SubDrive(hardwareMap);
 
         waitForStart();
         if (isStopRequested()) return;

@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.SubSystems;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-public class subButtonTranslation {
+public class SubButtonTranslation {
 
     double drive_X;
     double drive_Y;

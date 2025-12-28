@@ -3,8 +3,8 @@ package org.firstinspires.ftc.teamcode.teleop;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.SubSystems.subAprilTagDetection;
-import org.firstinspires.ftc.teamcode.SubSystems.subDrive;
+import org.firstinspires.ftc.teamcode.SubSystems.SubAprilTagDetection;
+import org.firstinspires.ftc.teamcode.SubSystems.SubDrive;
 
 
 @TeleOp(name="April Test TeleOp")
@@ -28,16 +28,16 @@ public class AprilTagRotater extends LinearOpMode {
 
     public static double targetAngle = (5 * Math.PI) / 4;
 
-    private subAprilTagDetection aprilTagTesting;
+    private SubAprilTagDetection aprilTagTesting;
 
-    subDrive drive = null;
+    SubDrive drive = null;
 
 
     @Override
     public void runOpMode() throws InterruptedException {
 
-        drive = new subDrive(hardwareMap);
-        aprilTagTesting = new subAprilTagDetection(hardwareMap, telemetry);
+        drive = new SubDrive(hardwareMap);
+        aprilTagTesting = new SubAprilTagDetection(hardwareMap, telemetry);
 
         waitForStart();
         if (isStopRequested()) return;

@@ -1,16 +1,16 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
-import org.firstinspires.ftc.teamcode.SubSystems.subDrive;
-import org.firstinspires.ftc.teamcode.SubSystems.subFlywheel;
-import org.firstinspires.ftc.teamcode.SubSystems.subIntake;
-import org.firstinspires.ftc.teamcode.SubSystems.subAprilTagDetection;
+import org.firstinspires.ftc.teamcode.SubSystems.SubDrive;
+import org.firstinspires.ftc.teamcode.SubSystems.SubFlywheel;
+import org.firstinspires.ftc.teamcode.SubSystems.SubIntake;
+import org.firstinspires.ftc.teamcode.SubSystems.SubAprilTagDetection;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 @Disabled
 @TeleOp(name="[Current] 4234 Main TeleOP")
-public class teleOPMain extends LinearOpMode {
+public class TeleOpOld extends LinearOpMode {
 
     // Drive Constants
     double kP = 0.4;
@@ -51,10 +51,10 @@ public class teleOPMain extends LinearOpMode {
     public double targetAngle;
 
     // Declare Subsystems
-    subDrive drive = null;
-    subFlywheel flywheel = null;
-    subIntake intake = null;
-    subAprilTagDetection subAprilTagDetection = null;
+    SubDrive drive = null;
+    SubFlywheel flywheel = null;
+    SubIntake intake = null;
+    SubAprilTagDetection subAprilTagDetection = null;
 
 
 
@@ -63,10 +63,10 @@ public class teleOPMain extends LinearOpMode {
 
 
         // Init Subsystems
-        drive = new subDrive(hardwareMap);
-        flywheel = new subFlywheel(hardwareMap);
-        intake = new subIntake(hardwareMap);
-        subAprilTagDetection = new subAprilTagDetection(hardwareMap, telemetry); //TODO: Check variable
+        drive = new SubDrive(hardwareMap);
+        flywheel = new SubFlywheel(hardwareMap);
+        intake = new SubIntake(hardwareMap);
+        subAprilTagDetection = new SubAprilTagDetection(hardwareMap, telemetry); //TODO: Check variable
 
         // Drive variables and controls
         double X_Power;
@@ -204,7 +204,7 @@ public class teleOPMain extends LinearOpMode {
 
                 }
 
-                flywheel.setFlyWheel(flyWheelSpeed);
+                flywheel.setFlyWheelRPM(flyWheelSpeed);
 
 
             }

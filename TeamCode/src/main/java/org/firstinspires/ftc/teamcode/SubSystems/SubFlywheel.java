@@ -1,28 +1,20 @@
 package org.firstinspires.ftc.teamcode.SubSystems;
 
-
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-
-public class subFlywheel {
-
+public class SubFlywheel {
+    
     DcMotorEx flyWheel;
 
-    public subFlywheel(HardwareMap hardwareMap) {
-
+    public SubFlywheel(HardwareMap hardwareMap) {
         flyWheel = hardwareMap.get(DcMotorEx.class, "flywheel1");
-
         flyWheel.setDirection(DcMotorSimple.Direction.REVERSE);
-
         flyWheel.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-
-
     }
 
-    public void setFlyWheel(double targetFlywheelRPM) { //TODO: Test
+    public void setFlyWheelRPM(double targetFlywheelRPM) { //TODO: Test
 
         // Set for 6000 RPM motor, may need to be changed?
         final double ticksPerRevolution = 21;
@@ -38,7 +30,6 @@ public class subFlywheel {
         }
 
         flyWheel.setVelocity(targetRPM / 60 * ticksPerRevolution);
-
     }
 
 }
