@@ -42,7 +42,7 @@ public class TeleOPMain extends LinearOpMode {
     boolean slowMode = false;
     public double drivePow = DRIVE_DEFAULT_POWER;
 
-    public boolean isRedTeam = false;
+    public boolean isRedTeam = false; // TODO: See if can be removed since all usages have been replaced with subData.getTeam()
     public double colorTagID;
 
     // public static double intakeAngle = 0.3 * Math.PI // TODO: Replaced by RED_INTAKE_TARGET and BLUE_INTAKE_TARGET. Can be removed if those work.
@@ -94,7 +94,7 @@ public class TeleOPMain extends LinearOpMode {
             drivePow = !slowMode ? DRIVE_DEFAULT_POWER : DRIVE_SLOW_POWER;
 
             if (gamepad1.aWasPressed()) {
-                headingTargetAngle = isRedTeam ? RED_INTAKE_TARGET : BLUE_INTAKE_TARGET;
+                headingTargetAngle = subData.getTeam() ? RED_INTAKE_TARGET : BLUE_INTAKE_TARGET;
                 headingLockState = 1;
             }
 
@@ -111,9 +111,9 @@ public class TeleOPMain extends LinearOpMode {
             }
 
             if (gamepad1.optionsWasPressed()) {
-                isRedTeam = !isRedTeam;
+                subData.changeTeam();
 
-                if (isRedTeam) {
+                if (subData.getTeam()) {
                     colorTagID = APRILTAG_RED_ID;
                 } else {
                     colorTagID = APRILTAG_BLUE_ID;
@@ -180,7 +180,7 @@ public class TeleOPMain extends LinearOpMode {
             if (wordyTelemetry) {
 
                 // Not as much practical use, but could be useful for demonstrations or when message clarity is needed.
-                telemetry.addLine(String.join(" ", "Robot is on the", isRedTeam ? "RED" : "BLUE", "team. Press [OPTIONS] to change."));
+                telemetry.addLine(String.join(" ", "Robot is on the", subData.getTeam() ? "RED" : "BLUE", "team. Press [OPTIONS] to change."));
                 telemetry.addLine();
                 telemetry.addLine(String.join(" ", "Slow mode is", slowMode ? "ON." : "OFF.", "Press [B] to change"));
                 telemetry.addLine();
@@ -188,7 +188,7 @@ public class TeleOPMain extends LinearOpMode {
             } else {
 
                 // More technical telemetry data, helpful for debugging.
-                telemetry.addData("Team", isRedTeam ? "RED. [Options] to change." : "BLUE. [Options] to change");
+                telemetry.addData("Team", subData.getTeam() ? "RED. [Options] to change." : "BLUE. [Options] to change");
                 telemetry.addLine();
                 telemetry.addData("Slow Mode?", slowMode ? "ON. [B] to change." : "Off. [B] to change.");
                 telemetry.addLine();

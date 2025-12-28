@@ -12,7 +12,7 @@ public class SubData {
         isRedTeam = !isRedTeam;
     }
 
-    public static boolean getTeam() {
+    public boolean getTeam() {
         return isRedTeam;
     }
 
