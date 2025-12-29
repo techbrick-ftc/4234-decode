@@ -1,9 +1,5 @@
 package org.firstinspires.ftc.teamcode.SubSystems;
 
-import static org.firstinspires.ftc.teamcode.SubSystems.SubData.isRedTeam;
-
-import android.util.Size;
-
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -19,19 +15,22 @@ import java.util.List;
 public class SubAprilTagDetection {
     private VisionPortal visionPortal;
     private AprilTagProcessor aprilTag;
-    public Telemetry telemetry; //TODO: Check if private or public
+    public Telemetry telemetry;
     private double imageWidth;
-    private double tagID;
+
+    final double kP = 0.2; // Applied to a value in radians, so higher than normal.
+
+    final double MAX_TURN_SPEED = 0.7;
 
     public SubAprilTagDetection(HardwareMap hardwareMap, Telemetry telemetry) {
         this.telemetry = telemetry;
 
         //note which tag to identify based on team
-        if (isRedTeam) {
-            tagID = 20;
-        } else {
-            tagID = 24;
-        }
+        // if (isRedTeam) {
+        //    tagID = 20;
+        // } else {
+        //    tagID = 24;
+        // }
 
         //set up the camera output and april tag processing
         imageWidth = 640;
@@ -44,11 +43,10 @@ public class SubAprilTagDetection {
                 .build();
 
         visionPortal = new VisionPortal.Builder()
-                .setCamera(hardwareMap.get(WebcamName.class,
-                        "Webcam 1"))
+                .setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
                 .addProcessor(aprilTag)
-                .setCameraResolution(new Size(640, 480))
-                .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
+        //        .setCameraResolution(new Size(640, 480))
+        //        .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
                 .build();
 
     }
@@ -56,7 +54,7 @@ public class SubAprilTagDetection {
     public Double getOffsetX(double tagID) {
         List <AprilTagDetection> detections = aprilTag.getDetections();
         if (detections.isEmpty()) {
-            return 0.0;
+            return Double.NaN;
         }
 
         for(AprilTagDetection detection : detections) {
@@ -65,25 +63,25 @@ public class SubAprilTagDetection {
             }
         }
 
-        return 0.0;
+        return Double.NaN;
 
 //        AprilTagDetection tag = detections.get(0);
 //        return tag.center.x - (imageWidth / 2.0);
     }
 
     //converts the offset into rotation correction value
-    public double getRotationCorrection(double colorTagID) {
-        double offset = getOffsetX(colorTagID);
+    public double getRotationCorrection(double tagID) {
+        double offset = getOffsetX(tagID);
 
-        if (offset == 0) {
-            return 0.0;
+        if(Double.isNaN(offset)) {
+            return Double.NaN;
+        } else {
+
+            // double kP = 0.003; // TODO: See if needs increasing, esp if changing from degrees to radians
+            double rotation = kP * offset;
+
+            return Math.max(-MAX_TURN_SPEED, Math.min(MAX_TURN_SPEED, rotation));
         }
-
-        // double kP = 0.003; //TODO: See if needs increasing, esp if changing from degrees to radians
-        double kP = 0.17;
-        double rotation = kP * offset;
-
-        return Math.max(-1, Math.min(1, rotation));
     }
 
     public void stop() {

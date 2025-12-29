@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 @Disabled
-@TeleOp(name="[Current] 4234 Main TeleOP")
+@TeleOp(name="old")
 public class TeleOpOld extends LinearOpMode {
 
     // Drive Constants
@@ -55,7 +55,6 @@ public class TeleOpOld extends LinearOpMode {
     SubFlywheel flywheel = null;
     SubIntake intake = null;
     SubAprilTagDetection subAprilTagDetection = null;
-
 
 
     @Override

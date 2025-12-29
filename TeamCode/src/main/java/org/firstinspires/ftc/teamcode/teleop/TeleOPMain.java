@@ -9,8 +9,6 @@ import org.firstinspires.ftc.teamcode.SubSystems.SubData;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import java.util.ServiceLoader;
-
 @TeleOp(name="Main TeleOP")
 public class TeleOPMain extends LinearOpMode {
 
@@ -18,7 +16,7 @@ public class TeleOPMain extends LinearOpMode {
     final double DRIVE_DEFAULT_POWER  = 1;
     final double DRIVE_SLOW_POWER     = 0.4;
 
-    // In radians. Outtake targets are backups to apriltag based targeting. Targets need to be tested.
+    // In radians. Outtake targets are backups to apriltag based targeting. TODO: Targets need to be tested.
     final double RED_INTAKE_TARGET             =  Math.PI * 0.3;
     final double BLUE_INTAKE_TARGET            = -Math.PI * 0.3;
     final double RED_OUTTAKE_TARGET_PRIMITIVE  =  Math.PI * 0.7;
@@ -42,7 +40,7 @@ public class TeleOPMain extends LinearOpMode {
     boolean slowMode = false;
     public double drivePow = DRIVE_DEFAULT_POWER;
 
-    public boolean isRedTeam = false; // TODO: See if can be removed since all usages have been replaced with subData.getTeam()
+    // public boolean isRedTeam = false; // TODO: See if can be removed since all usages have been replaced with subData.getTeam()
     public double colorTagID;
 
     // public static double intakeAngle = 0.3 * Math.PI // TODO: Replaced by RED_INTAKE_TARGET and BLUE_INTAKE_TARGET. Can be removed if those work.
@@ -51,6 +49,7 @@ public class TeleOPMain extends LinearOpMode {
     int headingLockState = 0; // 0 = standard, 1 = locked to fixed position, 2 = apriltag based
     static double headingAngle;
     static double headingTargetAngle = 0;
+    double aprilTagRotation;
     // double targetAngleMultiplier = -1; // TODO: Remove once RED_INTAKE_TARGET and BLUE_INTAKE_TARGET validated.
     public boolean fieldCentricActive = true;
 
@@ -89,9 +88,8 @@ public class TeleOPMain extends LinearOpMode {
 
             if (gamepad1.bWasPressed()) {
                 slowMode = !slowMode;
+                drivePow = !slowMode ? DRIVE_DEFAULT_POWER : DRIVE_SLOW_POWER;
             }
-
-            drivePow = !slowMode ? DRIVE_DEFAULT_POWER : DRIVE_SLOW_POWER;
 
             if (gamepad1.aWasPressed()) {
                 headingTargetAngle = subData.getTeam() ? RED_INTAKE_TARGET : BLUE_INTAKE_TARGET;
@@ -102,7 +100,7 @@ public class TeleOPMain extends LinearOpMode {
                 headingLockState = 2;
             }
 
-            if (Math.abs(rP) > 0.5) {
+            if (gamepad1.y || (headingLockState == 1 && Math.abs(rP) > 0.5)) {
                 headingLockState = 0;
             }
 
@@ -140,7 +138,12 @@ public class TeleOPMain extends LinearOpMode {
                 } else if (headingLockState == 2) {
 
                     // Apriltags. TODO: Debug
-                    drive.To(xP, yP, subAprilTagDetection.getRotationCorrection(colorTagID) * kP, drivePow, fieldCentricActive);
+                    aprilTagRotation = subAprilTagDetection.getRotationCorrection(colorTagID);
+                    if(!Double.isNaN(aprilTagRotation)){
+                        drive.To(xP, yP, aprilTagRotation, drivePow, fieldCentricActive);
+                    } else {
+                        drive.To(xP, yP, rP, drivePow, fieldCentricActive);
+                    }
                 }
 
                 if (gamepad1.dpadRightWasPressed()) {
@@ -165,12 +168,13 @@ public class TeleOPMain extends LinearOpMode {
                 }
             } else {
 
-                // Disables all robot functionality. Only for emergencies or at the end of matches, as needed.
-                drive.To(0,0,0,0,true);
-                flywheel.setFlyWheelRPM(FLYWHEEL_IDLE_RPM);
+                // Disables all robot functionality. Only for emergencies or at the end of matches as needed.
+                drive.To(0,0,0,0,fieldCentricActive);
+                flywheel.setFlyWheelRPM(0);
                 intake.setIntakePower(0);
                 intake.setTransferPower(0);
                 intake.setLiftPositionWithinRange(0,0);
+                subAprilTagDetection.stop();
             }
 
             intake.setLiftPositionWithinRange(gamepad1.left_bumper ? 0 : 1, gamepad1.right_bumper ? 0 : 1);
@@ -190,12 +194,12 @@ public class TeleOPMain extends LinearOpMode {
                 // More technical telemetry data, helpful for debugging.
                 telemetry.addData("Team", subData.getTeam() ? "RED. [Options] to change." : "BLUE. [Options] to change");
                 telemetry.addLine();
-                telemetry.addData("Slow Mode?", slowMode ? "ON. [B] to change." : "Off. [B] to change.");
+                telemetry.addData("Slow Mode", slowMode ? "ON. [B] to change." : "Off. [B] to change.");
                 telemetry.addLine();
                 telemetry.addData("IMU (radians)", drive.getRawImu());
                 telemetry.addData("Target Heading", headingTargetAngle);
                 telemetry.addLine();
-                telemetry.addLine("Wordy telemetry is OFF. Press [OPTIONS] on Gamepad 2 to change.");
+                telemetry.addLine("Wordy telemetry OFF. [OPTIONS] on Gamepad 2 to change.");
             }
             telemetry.update();
         }
