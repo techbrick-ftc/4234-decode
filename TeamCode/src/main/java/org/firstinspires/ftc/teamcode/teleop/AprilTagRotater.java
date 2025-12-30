@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.SubSystems.SubAprilTagDetection;
 import org.firstinspires.ftc.teamcode.SubSystems.SubDrive;
 
 
-@TeleOp(name="April Test TeleOp")
+@TeleOp(name="Apriltag Test TeleOp")
 public class AprilTagRotater extends LinearOpMode {
 
     double X_Power;
