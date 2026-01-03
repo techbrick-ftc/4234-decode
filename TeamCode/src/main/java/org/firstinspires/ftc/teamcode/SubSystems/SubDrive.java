@@ -10,12 +10,12 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+// import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 public class SubDrive {
 
     BNO055IMU imu;
-    Orientation orientation;
+    // Orientation orientation; TODO: Not sure if necessary
     BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
 
     DcMotorEx frontRight;
@@ -29,11 +29,11 @@ public class SubDrive {
 
         // Motor Definitions
         frontRight = hardwareMap.get(DcMotorEx.class, "frontRight");
-        frontLeft = hardwareMap.get(DcMotorEx.class, "frontLeft");
-        backRight = hardwareMap.get(DcMotorEx.class, "backRight");
-        backLeft = hardwareMap.get(DcMotorEx.class, "backLeft");
+        frontLeft  = hardwareMap.get(DcMotorEx.class, "frontLeft");
+        backRight  = hardwareMap.get(DcMotorEx.class, "backRight");
+        backLeft   = hardwareMap.get(DcMotorEx.class, "backLeft");
 
-        /*
+        /* TODO: Fix motor directions, replug bullet connectors?
         frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
         frontLeft.setDirection(DcMotorSimple.Direction.FORWARD);
         backRight.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -76,22 +76,19 @@ public class SubDrive {
             double backRightPower  = (Y + X - Rotation) / denominator;
 
             // Set motor power
-            frontLeft.setPower      (frontLeftPower  *   powerMultiplier);
-            backLeft.setPower       (backLeftPower   *   powerMultiplier);
-            frontRight.setPower     (frontRightPower *   powerMultiplier);
-            backRight.setPower      (backRightPower  *   powerMultiplier);
+            frontLeft.setPower  (frontLeftPower  * powerMultiplier);
+            backLeft.setPower   (backLeftPower   * powerMultiplier);
+            frontRight.setPower (frontRightPower * powerMultiplier);
+            backRight.setPower  (backRightPower  * powerMultiplier);
 
         } else {
 
-            frontRight     .setPower(0);
-            frontLeft      .setPower(0);
-            backRight      .setPower(0);
-            backLeft       .setPower(0);
+            frontRight .setPower(0);
+            frontLeft  .setPower(0);
+            backRight  .setPower(0);
+            backLeft   .setPower(0);
 
         }
-
-
-
     }
 
     public double getImu() {
@@ -102,7 +99,7 @@ public class SubDrive {
         return imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS).firstAngle;
     }
 
-    public void setOffset(double off){
+    public void setOffset(double off) {
         offset = off;
     }
 
