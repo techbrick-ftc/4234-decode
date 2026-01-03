@@ -25,11 +25,11 @@ public class SubData {
         isRedTeam = team;
     }
 
-    public void changeTeam() {
+    public void toggleTeam() {
         isRedTeam = !isRedTeam;
     }
 
-    public boolean getTeam() {
+    public boolean isRedTeam() {
         return isRedTeam;
     }
 

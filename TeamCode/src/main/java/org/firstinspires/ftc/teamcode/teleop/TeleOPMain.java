@@ -92,7 +92,7 @@ public class TeleOPMain extends LinearOpMode {
             }
 
             if (gamepad1.aWasPressed()) {
-                headingTargetAngle = subData.getTeam() ? RED_INTAKE_TARGET : BLUE_INTAKE_TARGET;
+                headingTargetAngle = subData.isRedTeam() ? RED_INTAKE_TARGET : BLUE_INTAKE_TARGET;
                 headingLockState = 1;
             }
 
@@ -113,9 +113,9 @@ public class TeleOPMain extends LinearOpMode {
             }
 
             if (gamepad1.optionsWasPressed()) {
-                subData.changeTeam();
+                subData.toggleTeam();
 
-                if (subData.getTeam()) {
+                if (subData.isRedTeam()) {
                     colorTagID = APRILTAG_RED_ID;
                 } else {
                     colorTagID = APRILTAG_BLUE_ID;
@@ -184,11 +184,11 @@ public class TeleOPMain extends LinearOpMode {
             intake.setLiftPositionWithinRange(gamepad1.left_bumper ? 0 : 1, gamepad1.right_bumper ? 0 : 1);
 
             // Telemetry below this line -----------------------------------------------------------
-            telemetry.addAction(subData::changeTeam); // TODO: See if this works
+            telemetry.addAction(subData::toggleTeam); // TODO: See if this works
             if (wordyTelemetry) {
 
                 // Not as much practical use, but could be useful for demonstrations or when message clarity is needed.
-                telemetry.addLine(String.join(" ", "Robot is on the", subData.getTeam() ? "RED" : "BLUE", "team. Press [OPTIONS] to change."));
+                telemetry.addLine(String.join(" ", "Robot is on the", subData.isRedTeam() ? "RED" : "BLUE", "alliance. Press [OPTIONS] to change."));
                 telemetry.addLine();
                 telemetry.addLine(String.join(" ", "Slow mode is", slowMode ? "ON." : "OFF.", "Press [B] to change"));
                 telemetry.addLine();
@@ -196,7 +196,7 @@ public class TeleOPMain extends LinearOpMode {
             } else {
 
                 // More technical telemetry data, helpful for debugging.
-                telemetry.addData("Team", subData.getTeam() ? "RED. [Options] to change." : "BLUE. [Options] to change");
+                telemetry.addData("Team", subData.isRedTeam() ? "RED. [Options] to change." : "BLUE. [Options] to change");
                 telemetry.addLine();
                 telemetry.addData("Slow Mode", slowMode ? "ON. [B] to change." : "OFF. [B] to change.");
                 telemetry.addLine();
