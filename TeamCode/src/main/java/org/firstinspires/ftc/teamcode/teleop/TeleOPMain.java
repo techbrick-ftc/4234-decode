@@ -25,7 +25,7 @@ public class TeleOPMain extends LinearOpMode {
     final double FLYWHEEL_HIGH_RPM = 6000;
     final double FLYWHEEL_MED_RPM  = 5000;
     final double FLYWHEEL_LOW_RPM  = 4500;
-    final double FLYWHEEL_IDLE_RPM = 0;
+    final double FLYWHEEL_IDLE_RPM = 0; // Should be left at 0 until end-of-match disable is finished.
 
     // May need to move to SubAprilTag, also need to check if correct
     final int APRILTAG_RED_ID  = 20;
@@ -40,7 +40,7 @@ public class TeleOPMain extends LinearOpMode {
     boolean slowMode = false;
     public double drivePow = DRIVE_DEFAULT_POWER;
 
-    // public boolean isRedTeam = false; // TODO: See if can be removed since all usages have been replaced with subData.getTeam()
+    // public boolean isRedTeam = false; // TODO: See if can be removed since all usages have been replaced with subData.isRedTeam()
     public double colorTagID;
 
     // public static double intakeAngle = 0.3 * Math.PI // TODO: Replaced by RED_INTAKE_TARGET and BLUE_INTAKE_TARGET. Can be removed if those work.
@@ -101,6 +101,10 @@ public class TeleOPMain extends LinearOpMode {
             }
 
             if (gamepad1.y || (headingLockState == 1 && Math.abs(rP) > 0.5)) {
+
+                // The reason for specifying headingLockState == 1 is so that the driver can drive
+                // normally until an apriltag is detected, without constantly having to re-enable
+                // auto-targeting when it gets automatically de-activated.
                 headingLockState = 0;
             }
 
@@ -120,11 +124,11 @@ public class TeleOPMain extends LinearOpMode {
             if (driveAndFireAllowed) {
                 if (headingLockState == 0) {
 
-                    // Standard Drive
+                    // Standard drive
                     drive.To(xP, yP, rP, drivePow, fieldCentricActive);
                 } else if (headingLockState == 1) {
 
-                    // Heading Locked
+                    // Heading locked to set position
                     headingAngle = headingTargetAngle - drive.getImu();
 
                     if (headingAngle >= Math.PI) {
@@ -194,7 +198,7 @@ public class TeleOPMain extends LinearOpMode {
                 // More technical telemetry data, helpful for debugging.
                 telemetry.addData("Team", subData.getTeam() ? "RED. [Options] to change." : "BLUE. [Options] to change");
                 telemetry.addLine();
-                telemetry.addData("Slow Mode", slowMode ? "ON. [B] to change." : "Off. [B] to change.");
+                telemetry.addData("Slow Mode", slowMode ? "ON. [B] to change." : "OFF. [B] to change.");
                 telemetry.addLine();
                 telemetry.addData("IMU (radians)", drive.getRawImu());
                 telemetry.addData("Target Heading", headingTargetAngle);
