@@ -50,7 +50,7 @@ public class Testing extends LinearOpMode {
             headingLockTriggerLast = headingLockTrigger;
             headingLockTrigger = gamepad1.x;
 
-            if (gamepad1.back && gamepad1.options){
+            if (gamepad1.back && gamepad1.options) {
                 drive.recalibrate();
             }
 
