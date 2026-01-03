@@ -36,7 +36,7 @@ public class AprilTagRotater extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        drive = new SubDrive(hardwareMap);
+        drive = new SubDrive(hardwareMap, Math.PI);
         aprilTagTesting = new SubAprilTagDetection(hardwareMap, telemetry);
 
         waitForStart();

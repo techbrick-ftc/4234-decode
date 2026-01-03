@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.SubSystems;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
-
 import com.qualcomm.hardware.bosch.BNO055IMU;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -25,7 +24,7 @@ public class SubDrive {
 
     public double offset = Math.PI;
 
-    public SubDrive(HardwareMap hardwareMap) {
+    public SubDrive(HardwareMap hardwareMap, final double offsetIMU) {
 
         // Motor Definitions
         frontRight = hardwareMap.get(DcMotorEx.class, "frontRight");
@@ -49,11 +48,10 @@ public class SubDrive {
         backRight.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         backLeft.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
+        offset = offsetIMU;
         imu = hardwareMap.get(BNO055IMU.class, "imu");
-
         parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
         imu.initialize(parameters);
-
     }
 
     public void To (double X_Movement, double Y_Movement, double Rotation, double powerMultiplier, boolean fieldCentric) {
