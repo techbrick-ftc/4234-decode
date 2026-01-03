@@ -16,7 +16,13 @@ public class SubData {
         return isRedTeam;
     }
 
+    public static void setAngle(double angle) {
+        storedAngle = angle;
+    }
 
+    public static double getAngle() {
+        return storedAngle;
+    }
 
 
 
