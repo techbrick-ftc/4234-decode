@@ -162,13 +162,13 @@ public class TeleOPMain extends LinearOpMode {
 
                 if (gamepad1.left_trigger >= 0.2) {
                     intake.setIntakePower(1);
-                    intake.setTransferPower(1);
+                    //intake.setTransferPower(1); TODO: Transfer is now powered off of intake motor, can remove this function fully once tested
                 } else if (gamepad1.right_trigger >= 0.2) {
                     intake.setIntakePower(-1);
-                    intake.setTransferPower(1);
+                    //intake.setTransferPower(1);
                 } else {
                     intake.setIntakePower(0);
-                    intake.setTransferPower(0);
+                    //intake.setTransferPower(0);
                 }
             } else {
 
