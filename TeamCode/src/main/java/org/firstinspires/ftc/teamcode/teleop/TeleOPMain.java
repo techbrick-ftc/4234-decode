@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
+import com.qualcomm.robotcore.hardware.HardwareMap;
+
 import org.firstinspires.ftc.teamcode.SubSystems.SubDrive;
 import org.firstinspires.ftc.teamcode.SubSystems.SubFlywheel;
 import org.firstinspires.ftc.teamcode.SubSystems.SubIntake;
@@ -8,9 +10,13 @@ import org.firstinspires.ftc.teamcode.SubSystems.SubData;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
+
 
 @TeleOp(name="Main TeleOP")
 public class TeleOPMain extends LinearOpMode {
+
+    VoltageSensor voltageSensor;
 
     // Define constants
     final double DRIVE_DEFAULT_POWER  = 1;
@@ -77,6 +83,8 @@ public class TeleOPMain extends LinearOpMode {
         intake               = new SubIntake(hardwareMap);
         subAprilTagDetection = new SubAprilTagDetection(hardwareMap, telemetry);
         subData              = new SubData();
+
+        voltageSensor = hardwareMap.get(VoltageSensor.class, "Control Hub");
 
         waitForStart();
         if (isStopRequested()) return;
@@ -203,6 +211,7 @@ public class TeleOPMain extends LinearOpMode {
                 telemetry.addData("IMU (radians)", drive.getRawImu());
                 telemetry.addData("Target Heading", headingTargetAngle);
                 telemetry.addLine();
+                telemetry.addData("Batt. Voltage", voltageSensor.getVoltage());
                 telemetry.addLine("Wordy telemetry OFF. [OPTIONS] on Gamepad 2 to change.");
             }
             telemetry.update();
